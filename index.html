@@ -1,0 +1,727 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8f3eb">
+<title>Mi Biblia</title>
+<link rel="manifest" href="./manifest.json">
+<style>
+:root {
+  --fondo: #f8f3eb;
+  --tarjeta: #fffdf9;
+  --dorado: #ad8955;
+  --texto: #514638;
+  --suave: #958775;
+  --borde: #e9dfd0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+header {
+  padding: 25px 20px 18px;
+  background: #eee4d5;
+  border-radius: 0 0 25px 25px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 27px;
+  color: #755a39;
+}
+
+header p {
+  margin-bottom: 0;
+  color: var(--suave);
+  font-size: 13px;
+}
+
+main {
+  padding: 18px;
+  padding-bottom: 95px;
+}
+
+.fecha {
+  font-size: 13px;
+  color: var(--suave);
+  margin-bottom: 15px;
+}
+
+.tarjeta {
+  background: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 17px;
+  padding: 17px;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 12px #00000008;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 5px 0 12px;
+}
+
+h3 {
+  font-size: 16px;
+  margin-top: 0;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.etiqueta {
+  color: var(--dorado);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  background: var(--dorado);
+  color: white;
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button.secundario {
+  background: #eee5d8;
+  color: var(--texto);
+}
+
+button:active {
+  opacity: .7;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 7px 0 13px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: #fffefa;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--texto);
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.progreso {
+  height: 9px;
+  border-radius: 20px;
+  background: #eee5d8;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.progreso div {
+  height: 100%;
+  width: 0%;
+  background: var(--dorado);
+  transition: width .3s;
+}
+
+.menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: #fffdf9;
+  border-top: 1px solid var(--borde);
+  padding: 10px 3px;
+  z-index: 10;
+}
+
+.menu button {
+  background: transparent;
+  color: var(--suave);
+  padding: 8px 3px;
+  font-size: 11px;
+  flex: 1;
+}
+
+.menu button.activo {
+  color: var(--dorado);
+  font-weight: bold;
+}
+
+.menu span {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 3px;
+}
+
+.seccion {
+  display: none;
+}
+
+.seccion.activa {
+  display: block;
+}
+
+.fila {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.fila button {
+  flex: 1;
+}
+
+.item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--borde);
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+small {
+  color: var(--suave);
+}
+
+#mensaje {
+  font-size: 13px;
+  color: #68835c;
+  min-height: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Mi Biblia 📖</h1>
+  <p>Un espacio para fortalecer tu fe cada día</p>
+</header>
+
+<main>
+
+<!-- INICIO -->
+<section id="inicio" class="seccion activa">
+
+<div class="fecha" id="fecha"></div>
+
+<div class="tarjeta">
+  <span class="etiqueta">Bienvenido a tu espacio espiritual</span>
+  <h2>Un día a la vez 🌿</h2>
+  <p>Dedica un momento a leer, meditar y prepararte.</p>
+</div>
+
+<div class="tarjeta">
+  <span class="etiqueta">Mi lectura bíblica</span>
+  <h2 id="lecturaInicio">Mi lectura pendiente</h2>
+  <div class="progreso">
+    <div id="barra"></div>
+  </div>
+  <small id="avance">0 capítulos completados</small>
+  <br><br>
+  <button onclick="mostrar('biblia')">Continuar lectura</button>
+</div>
+
+<div class="tarjeta">
+  <span class="etiqueta">Próxima preparación</span>
+  <h3 id="proxima">Todavía no tienes actividades</h3>
+  <p id="horaProxima">Programa tus horarios de estudio.</p>
+  <button class="secundario"
+  onclick="mostrar('recordatorios')">
+  Configurar horario
+  </button>
+</div>
+
+<div class="tarjeta">
+  <span class="etiqueta">Mis actividades</span>
+  <h3 id="totalActividades">0 actividades completadas</h3>
+  <p>Tu progreso se guarda automáticamente.</p>
+</div>
+
+</section>
+
+<!-- BIBLIA -->
+<section id="biblia" class="seccion">
+
+<div class="tarjeta">
+  <span class="etiqueta">Traducción del Nuevo Mundo</span>
+  <h2>Mi lectura bíblica</h2>
+  <p>Selecciona el libro y capítulo que deseas leer.</p>
+
+  <label>Libro bíblico</label>
+  <select id="libro">
+    <option>Génesis</option>
+    <option>Éxodo</option>
+    <option>Levítico</option>
+    <option>Números</option>
+    <option>Deuteronomio</option>
+    <option>Josué</option>
+    <option>Jueces</option>
+    <option>Rut</option>
+    <option>1 Samuel</option>
+    <option>2 Samuel</option>
+    <option>1 Reyes</option>
+    <option>2 Reyes</option>
+    <option>1 Crónicas</option>
+    <option>2 Crónicas</option>
+    <option>Esdras</option>
+    <option>Nehemías</option>
+    <option>Ester</option>
+    <option>Job</option>
+    <option>Salmos</option>
+    <option>Proverbios</option>
+    <option>Eclesiastés</option>
+    <option>El Cantar de los Cantares</option>
+    <option>Isaías</option>
+    <option>Jeremías</option>
+    <option>Lamentaciones</option>
+    <option>Ezequiel</option>
+    <option>Daniel</option>
+    <option>Oseas</option>
+    <option>Joel</option>
+    <option>Amós</option>
+    <option>Abdías</option>
+    <option>Jonás</option>
+    <option>Miqueas</option>
+    <option>Naúm</option>
+    <option>Habacuc</option>
+    <option>Sofonías</option>
+    <option>Ageo</option>
+    <option>Zacarías</option>
+    <option>Malaquías</option>
+    <option>Mateo</option>
+    <option>Marcos</option>
+    <option>Lucas</option>
+    <option>Juan</option>
+    <option>Hechos</option>
+    <option>Romanos</option>
+    <option>1 Corintios</option>
+    <option>2 Corintios</option>
+    <option>Gálatas</option>
+    <option>Efesios</option>
+    <option>Filipenses</option>
+    <option>Colosenses</option>
+    <option>1 Tesalonicenses</option>
+    <option>2 Tesalonicenses</option>
+    <option>1 Timoteo</option>
+    <option>2 Timoteo</option>
+    <option>Tito</option>
+    <option>Filemón</option>
+    <option>Hebreos</option>
+    <option>Santiago</option>
+    <option>1 Pedro</option>
+    <option>2 Pedro</option>
+    <option>1 Juan</option>
+    <option>2 Juan</option>
+    <option>3 Juan</option>
+    <option>Judas</option>
+    <option>Apocalipsis</option>
+  </select>
+
+  <label>Capítulo</label>
+  <input type="number" id="capitulo" min="1" value="1">
+
+  <button onclick="abrirBiblia()">Abrir lectura TNM</button>
+  <p><small>Se abrirá la fuente oficial de lectura.</small></p>
+</div>
+
+<div class="tarjeta">
+  <h3>Registrar capítulo leído</h3>
+  <p>Marca cada capítulo cuando termines tu lectura.</p>
+  <button onclick="completarLectura()">✓ Marcar como leído</button>
+  <p id="estadoLectura"></p>
+</div>
+
+<div class="tarjeta">
+  <h3>Mi progreso</h3>
+  <div class="progreso"><div id="barraBiblia"></div></div>
+  <small id="totalLectura">0 capítulos registrados</small>
+</div>
+
+</section>
+
+<!-- REUNIONES -->
+<section id="reuniones" class="seccion">
+
+<div class="tarjeta">
+  <span class="etiqueta">Preparación espiritual</span>
+  <h2>Mis reuniones</h2>
+  <p>Organiza tus preparaciones y actividades.</p>
+
+  <label>Tipo de reunión</label>
+  <select id="tipoReunion">
+    <option>Vida y Ministerio</option>
+    <option>Estudio de La Atalaya</option>
+    <option>Discurso público</option>
+    <option>Otra preparación</option>
+  </select>
+
+  <label>Tema o asignación</label>
+  <input id="tema" placeholder="Ej. Tesoros de la Biblia">
+
+  <label>Fecha de reunión</label>
+  <input type="date" id="fechaReunion">
+
+  <label>Notas de preparación</label>
+  <textarea id="notaReunion"
+  placeholder="Escribe tus ideas, respuestas y textos bíblicos..."></textarea>
+
+  <button onclick="guardarReunion()">Guardar preparación</button>
+</div>
+
+<div class="tarjeta">
+  <h3>Mis preparaciones guardadas</h3>
+  <div id="listaReuniones">
+    <small>Aún no tienes preparaciones.</small>
+  </div>
+</div>
+
+</section>
+
+<!-- RECORDATORIOS -->
+<section id="recordatorios" class="seccion">
+
+<div class="tarjeta">
+  <span class="etiqueta">Organiza tu tiempo</span>
+  <h2>Mis recordatorios ⏰</h2>
+  <p>Establece tus horarios para estudiar y prepararte.</p>
+
+  <label>Actividad</label>
+  <select id="actividad">
+    <option>Lectura bíblica</option>
+    <option>Preparar Vida y Ministerio</option>
+    <option>Preparar La Atalaya</option>
+    <option>Estudio personal</option>
+    <option>Repasar mis notas</option>
+  </select>
+
+  <label>Hora</label>
+  <input type="time" id="hora">
+
+  <label>Días de repetición</label>
+  <div id="dias">
+    <p><label><input type="checkbox" value="1"> Lunes</label></p>
+    <p><label><input type="checkbox" value="2"> Martes</label></p>
+    <p><label><input type="checkbox" value="3"> Miércoles</label></p>
+    <p><label><input type="checkbox" value="4"> Jueves</label></p>
+    <p><label><input type="checkbox" value="5"> Viernes</label></p>
+    <p><label><input type="checkbox" value="6"> Sábado</label></p>
+    <p><label><input type="checkbox" value="0"> Domingo</label></p>
+  </div>
+
+  <button onclick="guardarRecordatorio()">Guardar horario</button>
+  <p id="mensaje"></p>
+</div>
+
+<div class="tarjeta">
+  <h3>Horarios programados</h3>
+  <div id="listaRecordatorios">
+    <small>No tienes horarios guardados.</small>
+  </div>
+  <p><small>Las alarmas de segundo plano se habilitarán en la integración Android.</small></p>
+</div>
+
+</section>
+
+<!-- NOTAS -->
+<section id="notas" class="seccion">
+
+<div class="tarjeta">
+  <span class="etiqueta">Mi cuaderno espiritual</span>
+  <h2>Mis notas ✍️</h2>
+
+  <label>Título</label>
+  <input id="tituloNota" placeholder="Ej. Una enseñanza de Jeremías">
+
+  <label>Texto o referencia bíblica</label>
+  <input id="textoNota" placeholder="Ej. Jeremías 1:7">
+
+  <label>Mi reflexión</label>
+  <textarea id="contenidoNota"
+  placeholder="¿Qué aprendí? ¿Cómo puedo aplicarlo?"></textarea>
+
+  <button onclick="guardarNota()">Guardar nota</button>
+</div>
+
+<div class="tarjeta">
+  <h3>Mis reflexiones guardadas</h3>
+  <div id="listaNotas">
+    <small>Aún no tienes notas.</small>
+  </div>
+</div>
+
+</section>
+
+</main>
+
+<nav class="menu">
+  <button class="activo" onclick="mostrar('inicio',this)">
+    <span>⌂</span>Inicio
+  </button>
+  <button onclick="mostrar('biblia',this)">
+    <span>📖</span>Biblia
+  </button>
+  <button onclick="mostrar('reuniones',this)">
+    <span>🗓</span>Reuniones
+  </button>
+  <button onclick="mostrar('recordatorios',this)">
+    <span>⏰</span>Alarmas
+  </button>
+  <button onclick="mostrar('notas',this)">
+    <span>✎</span>Notas
+  </button>
+</nav>
+
+<script>
+const obtener = clave =>
+  JSON.parse(localStorage.getItem(clave) || "[]");
+
+const guardar = (clave, datos) =>
+  localStorage.setItem(clave, JSON.stringify(datos));
+
+function mostrar(id, boton) {
+  document.querySelectorAll('.seccion')
+    .forEach(s => s.classList.remove('activa'));
+
+  document.getElementById(id).classList.add('activa');
+
+  document.querySelectorAll('.menu button')
+    .forEach(b => b.classList.remove('activo'));
+
+  if (boton) boton.classList.add('activo');
+  else {
+    document.querySelectorAll('.menu button')
+      .forEach(b => {
+        if (b.getAttribute('onclick').includes(id))
+          b.classList.add('activo');
+      });
+  }
+
+  actualizar();
+}
+
+function actualizar() {
+  let lecturas = obtener('lecturas');
+  let reuniones = obtener('reuniones');
+  let notas = obtener('notas');
+  let recordatorios = obtener('recordatorios');
+
+  document.getElementById('avance').textContent =
+    lecturas.length + ' capítulos completados';
+
+  let porcentaje = Math.min(100, lecturas.length / 1189 * 100);
+
+  document.getElementById('barra').style.width =
+    porcentaje + '%';
+
+  document.getElementById('barraBiblia').style.width =
+    porcentaje + '%';
+
+  document.getElementById('totalLectura').textContent =
+    lecturas.length + ' capítulos registrados';
+
+  document.getElementById('totalActividades').textContent =
+    reuniones.length + ' preparaciones guardadas';
+
+  document.getElementById('listaReuniones').innerHTML =
+    reuniones.length ? reuniones.map((r,i) =>
+      `<div class="item"><b>${escapar(r.tema)}</b>
+      <p>${escapar(r.tipo)} · ${escapar(r.fecha)}</p>
+      <small>${escapar(r.nota)}</small>
+      <br><button class="secundario" onclick="eliminar('reuniones',${i})">Eliminar</button></div>`
+    ).join('') : '<small>Aún no tienes preparaciones.</small>';
+
+  document.getElementById('listaNotas').innerHTML =
+    notas.length ? notas.map((n,i) =>
+      `<div class="item"><b>${escapar(n.titulo)}</b>
+      <p>${escapar(n.texto)}</p>
+      <small>${escapar(n.contenido)}</small>
+      <br><button class="secundario" onclick="eliminar('notas',${i})">Eliminar</button></div>`
+    ).join('') : '<small>Aún no tienes notas.</small>';
+
+  document.getElementById('listaRecordatorios').innerHTML =
+    recordatorios.length ? recordatorios.map((r,i) =>
+      `<div class="item"><b>${escapar(r.actividad)}</b>
+      <p>${escapar(r.hora)} · ${escapar(r.dias)}</p>
+      <button class="secundario" onclick="eliminar('recordatorios',${i})">Eliminar</button></div>`
+    ).join('') : '<small>No tienes horarios guardados.</small>';
+
+  document.getElementById('lecturaInicio').textContent =
+    lecturas.length ? 'Continúa tu lectura' : 'Comienza tu lectura';
+
+  let siguiente = recordatorios[0];
+  document.getElementById('proxima').textContent =
+    siguiente ? siguiente.actividad : 'Todavía no tienes actividades';
+
+  document.getElementById('horaProxima').textContent =
+    siguiente ? 'Horario: ' + siguiente.hora : 'Programa tus horarios de estudio.';
+}
+
+function escapar(valor) {
+  return String(valor || '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;',
+    '"':'&quot;', "'":'&#39;'
+  }[c]));
+}
+
+function abrirBiblia() {
+  let libro = document.getElementById('libro').value;
+  let capitulo = parseInt(document.getElementById('capitulo').value);
+
+  if (!Number.isInteger(capitulo) || capitulo < 1) {
+    alert('Introduce un capítulo válido.');
+    return;
+  }
+
+  let url = 'https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/' +
+    encodeURIComponent(libro.toLowerCase().replaceAll(' ', '-')) +
+    '/' + capitulo + '/';
+
+  window.open(url, '_blank');
+}
+
+function completarLectura() {
+  let libro = document.getElementById('libro').value;
+  let capitulo = document.getElementById('capitulo').value;
+
+  let lecturas = obtener('lecturas');
+  let referencia = libro + ' ' + capitulo;
+
+  if (lecturas.includes(referencia)) {
+    alert('Este capítulo ya está registrado.');
+    return;
+  }
+
+  lecturas.push(referencia);
+  guardar('lecturas', lecturas);
+
+  document.getElementById('estadoLectura').textContent =
+    '¡Lectura registrada! 🌿';
+
+  actualizar();
+}
+
+function guardarReunion() {
+  let tema = document.getElementById('tema').value.trim();
+  if (!tema) return alert('Escribe el tema de preparación.');
+
+  let datos = obtener('reuniones');
+
+  datos.push({
+    tipo: document.getElementById('tipoReunion').value,
+    tema,
+    fecha: document.getElementById('fechaReunion').value,
+    nota: document.getElementById('notaReunion').value
+  });
+
+  guardar('reuniones', datos);
+
+  document.getElementById('tema').value = '';
+  document.getElementById('notaReunion').value = '';
+
+  alert('Preparación guardada.');
+  actualizar();
+}
+
+function guardarNota() {
+  let titulo = document.getElementById('tituloNota').value.trim();
+  if (!titulo) return alert('Escribe un título.');
+
+  let notas = obtener('notas');
+
+  notas.push({
+    titulo,
+    texto: document.getElementById('textoNota').value,
+    contenido: document.getElementById('contenidoNota').value
+  });
+
+  guardar('notas', notas);
+
+  document.getElementById('tituloNota').value = '';
+  document.getElementById('textoNota').value = '';
+  document.getElementById('contenidoNota').value = '';
+
+  alert('Nota guardada.');
+  actualizar();
+}
+
+function guardarRecordatorio() {
+  let actividad = document.getElementById('actividad').value;
+  let hora = document.getElementById('hora').value;
+
+  let dias = [...document.querySelectorAll('#dias input:checked')]
+    .map(c => ['Domingo','Lunes','Martes','Miércoles',
+      'Jueves','Viernes','Sábado'][Number(c.value)]);
+
+  if (!hora || dias.length === 0) {
+    return alert('Selecciona una hora y al menos un día.');
+  }
+
+  let recordatorios = obtener('recordatorios');
+
+  recordatorios.push({
+    actividad,
+    hora,
+    dias: dias.join(', ')
+  });
+
+  guardar('recordatorios', recordatorios);
+
+  document.querySelectorAll('#dias input')
+    .forEach(c => c.checked = false);
+
+  document.getElementById('hora').value = '';
+
+  document.getElementById('mensaje').textContent =
+    'Horario guardado correctamente.';
+
+  actualizar();
+}
+
+function eliminar(clave, indice) {
+  if (!confirm('¿Deseas eliminar este registro?')) return;
+
+  let datos = obtener(clave);
+  datos.splice(indice, 1);
+  guardar(clave, datos);
+  actualizar();
+}
+
+document.getElementById('fecha').textContent =
+  new Date().toLocaleDateString('es-CO', {
+    weekday:'long', day:'numeric',
+    month:'long', year:'numeric'
+  });
+
+actualizar();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("Mi Biblia preparada"))
+      .catch(error => console.error(error));
+  });
+}
+</script>
+</body>
+</html>
