@@ -1,10 +1,12 @@
 
-const CACHE = "mi-biblia-v1";
+const CACHE = "mi-biblia-v2";
 
 const ARCHIVOS = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
 self.addEventListener("install", event => {
