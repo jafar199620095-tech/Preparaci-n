@@ -1,0 +1,13 @@
+
+{
+  "name": "Mi Biblia - Preparación espiritual",
+  "short_name": "Mi Biblia",
+  "description": "Lectura bíblica y preparación de reuniones",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8f3eb",
+  "theme_color": "#f8f3eb",
+  "lang": "es"
+}
